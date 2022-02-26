@@ -4,6 +4,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 import study.querydsl.entity.Hello;
 import study.querydsl.entity.QHello;
@@ -14,6 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @Transactional
+// @Commit 해당 어노테이션을 걸면 rollback되지 않고 커밋된다.
 class QuerydslStudyApplicationTests {
 
     @Autowired //스프링에서 지원
