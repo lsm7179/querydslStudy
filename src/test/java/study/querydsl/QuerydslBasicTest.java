@@ -92,7 +92,6 @@ public class QuerydslBasicTest {
                 .fetchOne();
 
         assertThat(findMember.getUsername()).isEqualTo("member1");
-
     }
 
     @Test
@@ -106,7 +105,6 @@ public class QuerydslBasicTest {
                 .fetchOne();
 
         assertThat(findMember.getUsername()).isEqualTo("member1");
-
     }
 
     @Test
