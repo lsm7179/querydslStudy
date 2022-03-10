@@ -15,6 +15,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Commit;
 import study.querydsl.dto.MemberDto;
 import study.querydsl.dto.QMemberDto;
 import study.querydsl.dto.UserDto;
@@ -648,5 +649,49 @@ public class QuerydslBasicTest {
 
     private BooleanExpression allEq(String usernameCond,Integer ageCond){
         return usernameEq(usernameCond).and(ageEq(ageCond));
+    }
+
+
+    /** 벌크 연산은 조심해야 되는게 영속성 컨텍스트를 무시하고 디비에 바로 업데이트 한다.
+     *  추가로 검증 쿼리를 날려서 데이터를 받아와도 이미 영속성 컨텍스트에 데이터가 있으므로 디비를 버리고 기존 데이터가 유지된거처럼 나온다.
+     *   em.flush(); em.clear(); 을 사용해서 영속성 컨텍스트를 날리는게 좋다.
+     */
+    @Test
+    // @Commit
+    void bulkUpdate() {
+        long count = queryFactory
+                .update(member)
+                .set(member.username, "비회원")
+                .where(member.age.lt(28))
+                .execute();
+
+        em.flush();
+        em.clear();
+
+        List<Member> result = queryFactory
+                .selectFrom(member)
+                .fetch();
+
+        for (Member member1 : result) {
+            System.out.println("member1 = " + member1);
+        }
+    }
+
+    // 기존 숫자에 더하기
+    @Test
+    void bulkAdd() {
+        long count = queryFactory
+                .update(member)
+                .set(member.age, member.age.add(1))
+                // .set(member.age, member.age.multiply(2)) 곱하기
+                .execute();
+    }
+
+    @Test
+    void bulkDelete() {
+        queryFactory
+                .delete(member)
+                .where(member.age.gt(18))
+                .execute();
     }
 }
