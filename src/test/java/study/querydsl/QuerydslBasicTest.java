@@ -694,4 +694,37 @@ public class QuerydslBasicTest {
                 .where(member.age.gt(18))
                 .execute();
     }
+
+    @Test
+    void sqlFunction() {
+        //org.hibernate.dialect; 함수를 찾아서 있는 걸 사용해야 된다.
+        // 사용자 정의로 만들고 싶다면 dialect를 상속받아서 properties에 등록해야 된다.
+        List<String> result = queryFactory
+                .select(
+                        Expressions.stringTemplate("function('replace', {0}, {1}, {2})",
+                                member.username, "member", "M"))
+                .from(member)
+                .fetch();
+
+        for (String s : result) {
+            System.out.println("s = " + s);
+        }
+    }
+
+    @Test
+    void sqlFunction2() {
+        List<String> result = queryFactory
+                .select(member.username)
+                .from(member)
+                /*.where(member.username.eq(
+                        Expressions.stringTemplate("function('lower', {0})", member.username)))*/
+                //이런 모든(표준)디비에 사용가능한 일반적인 함수는 queryDsl에 어느정도 내장되어있다.
+                .where(member.username.eq(member.username.lower()))
+                //.where(member.username.eq(member.username.upper()))
+                .fetch();
+
+        for (String s : result) {
+            System.out.println("s = " + s);
+        }
+    }
 }
