@@ -69,12 +69,14 @@ class MemberJpaRepositoryTest {
         MemberSearchCondition condition = new MemberSearchCondition();
 
         //가급적 동적쿼리는 기본값이 있어야 좋다. 예를 들면 페이징처리
-        //condition.setAgeGoe(35);
-        //condition.setAgeLoe(40);
+        condition.setAgeGoe(35);
+        condition.setAgeLoe(40);
         condition.setTeamName("teamB");
 
-        List<MemberTeamDto> result = memberJpaRepository.searchBuBuilder(condition);
+        //List<MemberTeamDto> result = memberJpaRepository.searchBuBuilder(condition);
+        List<MemberTeamDto> result = memberJpaRepository.search(condition);
 
-        assertThat(result).extracting("username").containsExactly("member3","member4");
+        assertThat(result).extracting("username").containsExactly("member4");
     }
+
 }
