@@ -104,7 +104,7 @@ class MemberRepositoryTest {
 
     // 이 기능은 조인이 불가능하다.
     @Test
-    void querydslPredicateExcutorTest() {
+    void querydslPredicateExecutorTest() {
         Team teamA = new Team("teamA");
         Team teamB = new Team("teamB");
         em.persist(teamA);
